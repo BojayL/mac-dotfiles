@@ -22,14 +22,14 @@ export NVM_NODEJS_ORG_MIRROR="${NVM_NODEJS_ORG_MIRROR:-https://npmmirror.com/mir
   source "$(kiro --locate-shell-integration-path zsh)"
 
 # Normalize Enter if a terminal leaves CSI-u/modifyOtherKeys enabled.
-if [[ -o interactive ]]; then
+if [[ -o interactive && -t 0 ]]; then
   printf '\e[<u\e[>4;0m' 2>/dev/null
   bindkey '^[[13u' accept-line
 fi
 
 path=("$HOME/.local/bin" $path)
 
-if [[ -o interactive && "$TERM" != "dumb" ]]; then
+if [[ -o interactive && -t 0 && "$TERM" != "dumb" ]]; then
   command -v starship >/dev/null 2>&1 && eval "$(starship init zsh)"
 
   if command -v brew >/dev/null 2>&1; then
